@@ -1,0 +1,147 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    /* Aurora Theme - Deep space background */
+    --background: 225 84% 8%;
+    --foreground: 180 100% 98%;
+
+    /* Cards with subtle elevation */
+    --card: 225 50% 12%;
+    --card-foreground: 180 100% 98%;
+
+    --popover: 225 50% 12%;
+    --popover-foreground: 180 100% 98%;
+
+    /* Primary: Aurora cyan-green gradient */
+    --primary: 165 88% 58%;
+    --primary-foreground: 225 84% 8%;
+
+    /* Secondary: Deep blue accent */
+    --secondary: 230 70% 45%;
+    --secondary-foreground: 180 100% 98%;
+
+    /* Muted surfaces */
+    --muted: 225 40% 18%;
+    --muted-foreground: 180 20% 65%;
+
+    /* Accent: Bright cyan */
+    --accent: 175 100% 50%;
+    --accent-foreground: 225 84% 8%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 180 100% 98%;
+
+    /* Borders with aurora glow */
+    --border: 225 40% 20%;
+    --input: 225 40% 20%;
+    --ring: 165 88% 58%;
+
+    --radius: 0.75rem;
+
+    /* Aurora gradient colors */
+    --aurora-start: 165 88% 58%;
+    --aurora-end: 230 70% 65%;
+    --aurora-glow: 175 100% 50%;
+
+    /* Status colors */
+    --status-open: 165 88% 58%;
+    --status-locked: 45 90% 60%;
+    --status-revealing: 280 70% 65%;
+    --status-settled: 150 80% 55%;
+    --status-cancelled: 0 70% 60%;
+
+    /* Chart colors */
+    --chart-team-a: 165 88% 58%;
+    --chart-team-b: 280 70% 65%;
+  }
+}
+
+@layer utilities {
+  /* Aurora gradients */
+  .aurora-gradient {
+    background: linear-gradient(135deg, hsl(var(--aurora-start)) 0%, hsl(var(--aurora-end)) 100%);
+  }
+  
+  .aurora-gradient-radial {
+    background: radial-gradient(circle at 50% 0%, hsl(var(--aurora-start) / 0.3), transparent 70%);
+  }
+
+  .aurora-border {
+    border: 1px solid hsl(var(--aurora-start) / 0.3);
+  }
+
+  /* Aurora glow effect */
+  .aurora-glow {
+    box-shadow: 0 0 20px hsl(var(--aurora-glow) / 0.3),
+                0 0 40px hsl(var(--aurora-glow) / 0.2),
+                0 0 60px hsl(var(--aurora-glow) / 0.1);
+  }
+
+  /* Animated aurora wave */
+  @keyframes aurora-wave {
+    0%, 100% {
+      transform: translateY(0) scale(1);
+      opacity: 0.5;
+    }
+    50% {
+      transform: translateY(-20px) scale(1.05);
+      opacity: 0.8;
+    }
+  }
+
+  .aurora-wave {
+    animation: aurora-wave 3s ease-in-out infinite;
+  }
+
+  /* Ripple effect */
+  @keyframes ripple {
+    0% {
+      transform: scale(0.8);
+      opacity: 1;
+    }
+    100% {
+      transform: scale(2.5);
+      opacity: 0;
+    }
+  }
+
+  .ripple-effect {
+    animation: ripple 0.6s ease-out;
+  }
+
+  /* Bar chart grow animation */
+  @keyframes bar-grow {
+    from {
+      width: 0;
+    }
+    to {
+      width: var(--bar-width);
+    }
+  }
+
+  .bar-grow {
+    animation: bar-grow 1s ease-out forwards;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Space Grotesk', 'Inter', sans-serif;
+  }
+}
