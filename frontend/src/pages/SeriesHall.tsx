@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { SeriesCard, SeriesStatus } from "@/components/SeriesCard";
 import { Navbar } from "@/components/Navbar";
+import { CreateSeriesDialog } from "@/components/CreateSeriesDialog";
 import { Plus, Filter, Loader2 } from "lucide-react";
 import {
   Select,
@@ -28,6 +29,7 @@ interface SeriesSummary {
 const SeriesHall = () => {
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [sportFilter, setSportFilter] = useState<string>("all");
+  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const { data: seriesIds, isLoading: isLoadingIds } = useListSeries();
 
   const contracts = useMemo(
@@ -106,7 +108,11 @@ const SeriesHall = () => {
                 Private Predictions, Fair Payouts | Powered by FHE
               </p>
             </div>
-            <Button size="lg" className="aurora-gradient hover:opacity-90">
+            <Button
+              size="lg"
+              className="aurora-gradient hover:opacity-90"
+              onClick={() => setIsCreateDialogOpen(true)}
+            >
               <Plus className="mr-2 h-5 w-5" />
               Create Series
             </Button>
@@ -171,6 +177,11 @@ const SeriesHall = () => {
           </div>
         )}
       </div>
+
+      <CreateSeriesDialog
+        open={isCreateDialogOpen}
+        onOpenChange={setIsCreateDialogOpen}
+      />
     </div>
   );
 };
