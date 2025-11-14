@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useReadContract, useWriteContract, useWaitForTransactionReceipt } from "wagmi";
+import { useQueryClient } from "@tanstack/react-query";
 import { AURORA_PICKEM_ADDRESS, AURORA_PICKEM_ABI } from "@/config/contracts";
 import { toast } from "sonner";
 import type { Address } from "viem";
@@ -91,11 +92,15 @@ export const useMinEntryFee = () => {
 
 // Write hooks
 export const useCreateSeries = () => {
+  const queryClient = useQueryClient();
   const { writeContract, data: hash, error, isPending } = useWriteContract();
   const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({ hash });
 
   useEffect(() => {
     if (isSuccess && hash) {
+      // Invalidate and refetch series list
+      queryClient.invalidateQueries({ queryKey: ['readContract'] });
+
       toast.success("Series created successfully!", {
         description: "Your series has been created on-chain",
         action: {
@@ -105,7 +110,7 @@ export const useCreateSeries = () => {
         duration: 5000
       });
     }
-  }, [isSuccess, hash]);
+  }, [isSuccess, hash, queryClient]);
 
   useEffect(() => {
     if (error) {
