@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
@@ -36,14 +36,17 @@ export const BettingPanel = ({
   const { address, isConnected } = useAccount();
   const { ready, initializing, error, setError } = useFheStore();
   const { enterSeries, isPending, isConfirming } = useEnterSeries();
+  const fheInitAttempted = useRef(false);
 
   useEffect(() => {
-    if (isConnected && !ready && !initializing) {
+    if (isConnected && !ready && !fheInitAttempted.current) {
+      fheInitAttempted.current = true;
       initializeFHE(window.ethereum).catch((err) => {
         console.error(err);
+        fheInitAttempted.current = false; // Allow retry on error
       });
     }
-  }, [isConnected, ready, initializing]);
+  }, [isConnected, ready]);
 
   const handleSubmit = async () => {
     if (!isConnected || !address) {
