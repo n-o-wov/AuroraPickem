@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -10,11 +11,13 @@ import {
   Lock,
   CheckCircle2,
   TrendingUp,
+  PlayCircle,
   ArrowRight,
   Sparkles
 } from "lucide-react";
 
 const Index = () => {
+  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
 
   const features = [
     {
@@ -116,16 +119,35 @@ const Index = () => {
           {/* Demo Video Card */}
           <Card className="overflow-hidden border-2 border-primary/20 shadow-xl">
             <CardContent className="p-0">
-              <div className="aspect-video bg-black">
-                <video
-                  controls
-                  className="w-full h-full"
-                  poster="/vedio.mp4"
+              {isVideoPlaying ? (
+                <div className="aspect-video bg-black">
+                  <video
+                    controls
+                    autoPlay
+                    className="w-full h-full"
+                  >
+                    <source src="/vedio.mp4" type="video/mp4" />
+                    Your browser does not support the video tag.
+                  </video>
+                </div>
+              ) : (
+                <div
+                  className="aspect-video bg-gradient-to-br from-primary/10 via-blue-500/10 to-purple-500/10 relative cursor-pointer group"
+                  onClick={() => setIsVideoPlaying(true)}
                 >
-                  <source src="/vedio.mp4" type="video/mp4" />
-                  Your browser does not support the video tag.
-                </video>
-              </div>
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="text-center space-y-4">
+                      <div className="relative">
+                        <div className="absolute inset-0 bg-primary/20 blur-2xl rounded-full scale-150 group-hover:scale-175 transition-transform" />
+                        <PlayCircle className="h-20 w-20 text-primary relative z-10 group-hover:scale-110 transition-transform" />
+                      </div>
+                      <p className="text-sm font-medium">Click to play demo</p>
+                    </div>
+                  </div>
+                  {/* Grid overlay */}
+                  <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.03)_1px,transparent_1px)] bg-[size:40px_40px]" />
+                </div>
+              )}
             </CardContent>
           </Card>
         </div>
