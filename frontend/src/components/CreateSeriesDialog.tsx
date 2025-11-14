@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useCreateSeries } from "@/hooks/useAuroraContract";
+import { useAccount } from "wagmi";
 import { parseEther } from "viem";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
@@ -20,10 +21,16 @@ export const CreateSeriesDialog = ({ open, onOpenChange }: CreateSeriesDialogPro
   const [entryFee, setEntryFee] = useState("0.01");
   const [durationDays, setDurationDays] = useState("7");
 
+  const { isConnected } = useAccount();
   const { createSeries, isPending, isConfirming, isSuccess } = useCreateSeries();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!isConnected) {
+      toast.error("Please connect your wallet first");
+      return;
+    }
 
     if (!seriesId || !teamA || !teamB || !entryFee || !durationDays) {
       toast.error("Please fill all fields");
@@ -143,13 +150,15 @@ export const CreateSeriesDialog = ({ open, onOpenChange }: CreateSeriesDialogPro
             </Button>
             <Button
               type="submit"
-              disabled={isPending || isConfirming}
+              disabled={!isConnected || isPending || isConfirming}
             >
               {isPending || isConfirming ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   {isPending ? "Waiting for signature..." : "Confirming..."}
                 </>
+              ) : !isConnected ? (
+                "Connect Wallet First"
               ) : (
                 "Create Series"
               )}
