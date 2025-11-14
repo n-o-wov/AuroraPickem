@@ -35,15 +35,10 @@ export const CreateSeriesDialog = ({ open, onOpenChange }: CreateSeriesDialogPro
       const durationSeconds = BigInt(parseInt(durationDays) * 24 * 60 * 60);
 
       await createSeries(seriesId, teamA, teamB, entryFeeWei, durationSeconds);
-
-      toast.success("Series creation initiated", {
-        description: "Please wait for transaction confirmation"
-      });
+      // Toast notifications are handled by the hook
     } catch (err: any) {
       console.error("Create series error:", err);
-      toast.error("Failed to create series", {
-        description: err?.message || "Please try again"
-      });
+      // Error toast will be handled by the hook
     }
   };
 

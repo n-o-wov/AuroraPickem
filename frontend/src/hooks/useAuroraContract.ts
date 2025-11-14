@@ -94,6 +94,28 @@ export const useCreateSeries = () => {
   const { writeContract, data: hash, error, isPending } = useWriteContract();
   const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({ hash });
 
+  useEffect(() => {
+    if (isSuccess && hash) {
+      toast.success("Series created successfully!", {
+        description: "Your series has been created on-chain",
+        action: {
+          label: "View on Etherscan →",
+          onClick: () => window.open(`https://sepolia.etherscan.io/tx/${hash}`, '_blank')
+        },
+        duration: 5000
+      });
+    }
+  }, [isSuccess, hash]);
+
+  useEffect(() => {
+    if (error) {
+      toast.error("Failed to create series", {
+        description: error?.message || "Please try again",
+        duration: 5000
+      });
+    }
+  }, [error]);
+
   const createSeries = async (
     seriesId: string,
     teamA: string,
@@ -109,7 +131,7 @@ export const useCreateSeries = () => {
         args: [seriesId, teamA, teamB, entryFee, duration]
       });
     } catch (err) {
-      toast.error("Failed to create series");
+      console.error("Create series error:", err);
       throw err;
     }
   };
